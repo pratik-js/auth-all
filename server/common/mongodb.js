@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 
-
+// mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/ecom
 const url = process.env.MONGODB_URI;
 const dbName = 'ecom';
 
