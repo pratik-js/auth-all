@@ -1,7 +1,7 @@
-import express from 'express';
+const express = require('express');
+const product = require('./product');
+const getSchema = require('./getSchema');
 // const user = require('./user');
-import product from './product';
-import getSchema from './getSchema';
 const router = express.Router();
 
 // router.use('/', user);

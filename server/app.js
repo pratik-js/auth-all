@@ -1,8 +1,8 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+const express = require('express');
+const bodyParser = require('body-parser');
 
-// import { authenticate } from'./middleware/authenticate';
-import apiRoutes from './api/router';
+// const authenticate = require('../middleware/authenticate').authenticate;
+const apiRoutes = require('./api/routes');
 
 var app = express();
 
@@ -22,18 +22,15 @@ app.use(function(req, res, next) {
 });
 app.use(apiRoutes);
 
-const server = require('http').createServer(app);
+// const server = require('http').createServer(app);
 const port = process.env.PORT;
-const ip = process.env.IP;
-setImmediate(() => {
-  server.listen(port, ip, () => {
-    console.log(
-      'Express server listening on http://%s:%d, in %s mode',
-      ip,
-      port,
-      process.env.NODE_ENV
-    );
-  });
-});
+const ip = process.env.IP || 'localhost';
 
-module.exports = { app };
+app.listen(port, () => {
+  console.log(
+    'Express server listening on http://%s:%d, in %s mode',
+    ip,
+    port,
+    process.env.NODE_ENV
+  );
+});
