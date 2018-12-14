@@ -1,25 +1,24 @@
 const dataHelper = require('../../common/data.helper');
-const { mongodbHelper } = require('../../common/mongodb.helper');
+const { mdbHelper } = require('../../mongodb/helper');
 const { router } = require('../../common/');
 var entityName = 'product';
 
 router.post('/product', (req, res) => {
   console.log('product');
-  var data = dataHelper.readData(req, res, entityName);
+  var data = dataHelper.readData(entityName, req, res);
   if (!data) {
     return;
   }
-  console.log(data);
-  mongodbHelper.insert(entityName, data, res);
-  // dataHelper.saveDoc(res, entityName, data);
+  mdbHelper.insert(entityName, data, res);
 });
 
 router.get('/product', (req, res) => {
-  return dataHelper.getByList(req, res, entityName);
+  let filter, page, limit;
+  mdbHelper.list(entityName, { filter, page, limit }, res);
 });
 
 router.get('/product/:id', (req, res) => {
-  return dataHelper.getById(req, res, entityName);
+  mdbHelper.getById(entityName, id, res);
 });
 
 router.delete('/product/:id', (req, res) => {
@@ -33,7 +32,7 @@ router.patch('/product/:id', (req, res) => {
   }
   const patchData = data.patchData;
   patchData.updatedAt = new Date().getTime();
-  dataHelper.patchDoc(res, entityName, data);
+  mdbHelper.update(entityName, id, patchData, res);
 });
 
 module.exports = router;
