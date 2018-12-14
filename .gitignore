@@ -2,7 +2,6 @@
 
 # environment
 /server/local.env
-/server/test.env
 
 # compiled output
 /dist
