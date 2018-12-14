@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const path = require('path');
 
 // const authenticate = require('../middleware/authenticate').authenticate;
 const apiRoutes = require('./api/routes');
@@ -13,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // res.header("Access-Control-Allow-Credentials", true);
 
 app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  // res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
     'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json'
@@ -22,10 +23,9 @@ app.use(function(req, res, next) {
   next();
 });
 app.use('/api', apiRoutes);
-app.use(express.static(__dirname + '/../ui'));
+app.use(express.static(path.resolve('./ui')));
 app.get('*', function(req, res) {
-  res.sendFile(__dirname + '../ui/index.html');
-  //__dirname : It will resolve to your project folder.
+  res.sendFile(path.resolve('./ui/index.html'));
 });
 const port = process.env.PORT;
 const ip = process.env.IP || 'localhost';
