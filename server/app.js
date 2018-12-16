@@ -8,7 +8,7 @@ const { initMongoDB } = require('./mongodb/connect');
 const appRoutes = require('./api/routes');
 
 const app = express();
-app.use(morgan('tiny'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -30,7 +30,7 @@ app.get('*', function(req, res) {
 });
 const port = 3210;
 const ip = process.env.IP || 'localhost';
-
+process.env.NODE_ENV === 'DEV' && app.use(morgan('tiny'));
 (async () => {
   await initMongoDB();
   app.listen(port, () => {
