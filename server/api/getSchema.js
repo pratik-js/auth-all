@@ -1,8 +1,6 @@
-const fs = require('fs');
-const getSchema = require('express').Router();
-var path = require('path');
+const router = require('express').Router();
 
-getSchema.get('/schema/:entityName', (req, res) => {
+router.get('/:entityName', (req, res) => {
   const entityName = req.params.entityName;
   const filePath = './' + entityName + '/schema';
   try {
@@ -12,4 +10,4 @@ getSchema.get('/schema/:entityName', (req, res) => {
   }
 });
 
-module.exports = getSchema;
+module.exports = router;

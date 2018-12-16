@@ -1,21 +1,21 @@
 const { MongoClient } = require('mongodb');
-const Logger = require('mongodb').Logger;
+// const Logger = require('mongodb').Logger;
 
-const url = process.env.MONGODB_URI;
-const dbName = 'ecom';
-const client = new MongoClient(url);
-
+let mdbObj;
 // Set debug level
-Logger.setLevel('debug');
+// Logger.setLevel('debug');
 
-async function open(entityName) {
+async function initMongoDB(entityName) {
+  const url = process.env.MONGODB_URI;
+  const dbName = 'ecom';
+  const client = new MongoClient(url);
   try {
-    if (!client.isConnected) {
+    if (!client.isConnected()) {
       await client.connect();
     }
-    console.log('Connected correctly to server');
-    const db = client.db(dbName);
-    return entityName ? db.collection(entityName) : db;
+    console.info('Connected correctly to server');
+    mdbObj = client.db(dbName);
+    return true;
   } catch (err) {
     console.error('MongoClient connection Error------------');
     console.error(err.stack);
@@ -23,8 +23,13 @@ async function open(entityName) {
   }
 }
 
-function close() {
-  client.isConnected && client.close();
+function getCollection(entityName) {
+  try {
+    return mdbObj.collection(entityName);
+  } catch (err) {
+    console.error('MongoClient collection not found');
+    console.error(err.stack);
+  }
 }
 
-module.exports = { open, close };
+module.exports = { initMongoDB, getCollection };

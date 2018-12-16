@@ -9,7 +9,7 @@ function getSchema(entityName) {
 }
 
 module.exports = {
-  readNewData: (req, res, entityName) => {
+  readNewData: (entityName, req, res) => {
     var jsonSchema = getSchema(entityName);
     delete jsonSchema.properties.id;
     var fieldToRead = Object.keys(jsonSchema.properties);
@@ -23,21 +23,22 @@ module.exports = {
         res.status(400).send(validate.errors);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send('validation function broke');
     }
   },
-  readPatchData: (req, res, entityName) => {
+  readPatchData: (entityName, req, res) => {
     const jsonSchema = getSchema(entityName);
     const fieldToRead = Object.keys(jsonSchema.properties); // get all field name from schema e.g [name, age, country]
-    const patchData = _.pick(req.body, fieldToRead); // read data from request e.g {name: 'abc', age: 20}
+    const patchData = pick(req.body, fieldToRead); // read data from request e.g {name: 'abc', age: 20}
     const patchDataKey = Object.keys(patchData); // get all field name which sent in request e.g [name, age]
 
     // update json schema for validate only patch data. e.g remove other field rules
-    jsonSchema.properties = _.pick(jsonSchema.properties, patchDataKey);
+    jsonSchema.properties = pick(jsonSchema.properties, patchDataKey);
     jsonSchema.required = patchDataKey.filter(fieldName =>
       jsonSchema.required.includes(fieldName)
     );
+
     try {
       var validate = ajvPatch.compile(jsonSchema);
       if (validate(patchData)) {
@@ -46,7 +47,7 @@ module.exports = {
         res.status(400).send(validate.errors);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(400).send({ error: 'validation api exception' });
     }
   }
