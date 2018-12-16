@@ -1,0 +1,69 @@
+{
+  "configVersion": 1,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/favicon.ico",
+        "/main.0da68ceca54e9d4eb552.js",
+        "/polyfills.fec146f4472ee5fb9cac.js",
+        "/runtime.ec2944dd8b20ec099bf3.js",
+        "/styles.1938366b2a1adc378e52.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "urls": [
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/assets/icons/icon-128x128.png": "2c3fddc569adcebd0442f8290dc80d62e7453e69",
+    "/assets/icons/icon-144x144.png": "d298af8c15645b8c451b3d1d4df4d11f9894f87d",
+    "/assets/icons/icon-152x152.png": "c9a68e1d15bcefcaee17fb3bb6f585f12fd96a2d",
+    "/assets/icons/icon-192x192.png": "cf943ca64e6303ef4bcf813539b062e57e6c362f",
+    "/assets/icons/icon-384x384.png": "806ef9d148bf031cea76d71ac10617248ac3535d",
+    "/assets/icons/icon-512x512.png": "0c50cf945fc913a1c1fd3f52aa31133c68307d88",
+    "/assets/icons/icon-72x72.png": "d8299234c37044e32a7a1dccc907fba5191eda5b",
+    "/assets/icons/icon-96x96.png": "cd7ff607449081bc946be8af54cbc893e8ae41fc",
+    "/favicon.ico": "3f436bf563ac0e2bc7a51063fcbec9b33afe08b7",
+    "/main.0da68ceca54e9d4eb552.js": "40bc7b52218e6e15d8cfc106a0eaa9ba86cef7b2",
+    "/polyfills.fec146f4472ee5fb9cac.js": "ce68d153e9b9b6d26b625069c0ee99ae09c6f255",
+    "/runtime.ec2944dd8b20ec099bf3.js": "b62956c2192bfe5516d6374e753773901ed50ec5",
+    "/styles.1938366b2a1adc378e52.css": "c354bb075b6391e257d343c7d0b6834692b2c643"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ]
+}

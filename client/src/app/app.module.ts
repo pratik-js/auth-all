@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { PagesModule } from './pages/pages.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialInUseModule } from './material-in-use/material-in-use.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +18,10 @@ import { MaterialInUseModule } from './material-in-use/material-in-use.module';
     BrowserAnimationsModule,
     MaterialInUseModule,
     PagesModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
