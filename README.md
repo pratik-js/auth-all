@@ -1,6 +1,6 @@
-# auth-all
+# ngex
 
-auth using multiple api in node.js with new angular
+node.js with new angular
 
 Temporarily ignore changes
 git update-index --assume-unchanged server/local.env
