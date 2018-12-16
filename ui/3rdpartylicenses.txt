@@ -378,6 +378,9 @@ MIT
 
 @angular/material/tabs
 
+@angular/service-worker
+MIT
+
 zone.js
 MIT
 The MIT License
