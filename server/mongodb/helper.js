@@ -1,86 +1,89 @@
 const { ObjectID } = require('mongodb');
-const { open, close } = require('./connect');
-function sendResponse(res) {
-  if (res) {
-    res.send(dbRes || { done: true });
-  }
-}
+const { getCollection } = require('./connect');
+
 const mdbHelper = {
-  getById: async (entityName, id, res) => {
+  list: async (entityName, { filter = {}, page = 0, limit = 10 }, res) => {
+    const collection = getCollection(entityName);
     try {
-      const collection = await open(entityName);
-      const dbRes = await collection.findOne(id);
-      close(); // Close connection
-      sendResponse(res, dbRes);
-    } catch (err) {
-      console.error(err.stack);
-    }
-  },
-  list: async (entityName, { filter = null, page = 0, limit = 10 }, res) => {
-    try {
-      const collection = await open(entityName);
       const dbRes = await collection
         .find(filter)
         .limit(limit)
         .toArray();
-      close(); // Close connection
+
       sendResponse(res, dbRes);
     } catch (err) {
       console.error(err.stack);
     }
   },
   insert: async (entityName, data, res) => {
+    const collection = getCollection(entityName);
     try {
       // Insert a single document
-      const collection = await open(entityName);
       const dbRes = await collection.insertOne(data);
-      console.log(dbRes.insertedCount);
-      close(); // Close connection
-      sendResponse(res, dbRes);
+      sendResponse(res, { inserted: dbRes.insertedCount });
     } catch (err) {
       console.error(err.stack);
     }
   },
   insertMany: async (entityName, data, res) => {
+    const collection = getCollection(entityName);
     try {
-      const collection = await open(entityName);
       // Insert multiple documents
-      const dbRes = await collection.insertMany([{ a: 2 }, { a: 3 }]);
-      close(); // Close connection
+      const dbRes = await collection.insertMany(data); // [{ a: 2 }, { a: 3 }]
       sendResponse(res, dbRes);
     } catch (err) {
       console.error(err.stack);
     }
   },
-  update: async (entityName, data, res) => {
+  update: async (entityName, id, patchData, res) => {
+    const collection = getCollection(entityName);
     try {
-      const collection = await open(entityName);
-      const dbRes = await collection.updateOne(data); // {a:1}, {$set: {b: 1}}
-      close(); // Close connection
+      const dbRes = await collection.updateOne(
+        { _id: get_id(id) },
+        { $set: patchData }
+      ); // {a:1}, {$set: {b: 1}}
+      sendResponse(res, { updated: dbRes.modifiedCount });
+    } catch (err) {
+      console.error(err.stack);
+    }
+  },
+  getById: async (entityName, id, res) => {
+    try {
+      const collection = getCollection(entityName);
+      const dbRes = await collection.findOne({ _id: get_id(id) });
       sendResponse(res, dbRes);
     } catch (err) {
       console.error(err.stack);
     }
   },
-  delete: async (entityName, data, res) => {
+  deleteById: async (entityName, id, res) => {
+    const collection = getCollection(entityName);
     try {
-      const collection = await open(entityName);
-      const dbRes = await collection.deleteOne(data);
-      close(); // Close connection
-      sendResponse(res, dbRes);
+      const dbRes = await collection.deleteOne({ _id: get_id(id) });
+      sendResponse(res, { deleted: dbRes.deletedCount });
+      // sendResponse(res, dbRes);
     } catch (err) {
       console.error(err.stack);
     }
   }
 };
 
-function validateMdbId(req, res) {
-  var id = req.params.id;
-  if (id && !ObjectID.isValid(id)) {
-    res.status(500).send();
-    return null;
+function validateMdbId(id) {
+  if (id && ObjectID.isValid(id)) {
+    return id;
   }
-  return id;
+}
+
+function sendResponse(res, resData) {
+  if (res) {
+    res.send(resData || { done: true });
+  }
+}
+
+function get_id(id) {
+  if (validateMdbId(id)) {
+    return new ObjectID(id);
+  }
 }
 
 module.exports = { validateMdbId, mdbHelper };

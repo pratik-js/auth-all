@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input matInput placeholder="Name*" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Price"
+        formControlName="price"
+        type="number"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Quantity"
+        formControlName="quantity"
+        type="number"
+      />
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button
+    mat-raised-button
+    color="primary"
+    type="button"
+    [disabled]="!productForm.valid"
+    (click)="onSubmit()"
+  >
+    {{ buttonTitle }}
+  </button>
+  <button mat-button (click)="onNoClick()">Close</button>
+</div>
