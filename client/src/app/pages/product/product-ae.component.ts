@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProductService } from './product.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-product-ae',
@@ -8,17 +9,50 @@ import { ProductService } from './product.service';
   styleUrls: ['./product-ae.component.scss']
 })
 export class ProductAeComponent implements OnInit {
-  productForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    price: new FormControl(null),
-    quantity: new FormControl(null)
-  });
-  constructor(private ps: ProductService) {}
+  productForm;
+  title;
+  buttonTitle;
+  constructor(
+    private ps: ProductService,
+    public dialogRef: MatDialogRef<ProductAeComponent>,
+    @Inject(MAT_DIALOG_DATA) public data
+  ) {
+    if (data.editData) {
+      this.buttonTitle = 'Update';
+      this.title = 'Edit';
+      const { name, price, quantity } = data.editData;
+      this.initForm(name, price, quantity);
+    } else {
+      this.initForm();
+      this.buttonTitle = 'Add';
+      this.title = 'Add New';
+    }
+  }
 
   ngOnInit() {}
 
-  onSubmit() {
-    console.warn(this.productForm.value);
-    this.ps.insert(this.productForm.value);
+  initForm(name = '', price = null, quantity = null) {
+    this.productForm = new FormGroup({
+      name: new FormControl(name, Validators.required),
+      price: new FormControl(price),
+      quantity: new FormControl(quantity)
+    });
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  async onSubmit() {
+    if (this.data.editData) {
+      const data = await this.ps.update(
+        this.data.editData._id,
+        this.productForm.value
+      );
+      data && this.dialogRef.close(true);
+    } else {
+      const data = await this.ps.insert(this.productForm.value);
+      this.dialogRef.close(true);
+    }
   }
 }

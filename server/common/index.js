@@ -1,4 +1,8 @@
+const dataHelper = require('./data.helper');
+const { mdbHelper } = require('../mongodb/helper');
+
 module.exports = {
-  router: require('express').Router()
+  dataHelper,
+  mdbHelper
   // authenticate: require('../middleware/authenticate').authenticate,
 };

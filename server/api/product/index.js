@@ -1,15 +1,22 @@
-const dataHelper = require('../../common/data.helper');
-const { mdbHelper } = require('../../mongodb/helper');
-const { router } = require('../../common/');
+const router = require('express').Router();
+const { dataHelper, mdbHelper } = require('../../common');
 var entityName = 'product';
 
 router.post('/product', (req, res) => {
-  console.log('product');
-  var data = dataHelper.readData(entityName, req, res);
+  const data = dataHelper.readNewData(entityName, req, res);
   if (!data) {
-    return;
+    res.send({ inserted: 0 });
   }
   mdbHelper.insert(entityName, data, res);
+});
+
+router.patch('/product/:id', (req, res) => {
+  const patchData = dataHelper.readPatchData(entityName, req, res);
+  if (!patchData) {
+    res.send({ updated: 0 });
+  }
+  patchData.updatedAt = new Date().getTime();
+  mdbHelper.update(entityName, req.params.id, patchData, res);
 });
 
 router.get('/product', (req, res) => {
@@ -18,21 +25,11 @@ router.get('/product', (req, res) => {
 });
 
 router.get('/product/:id', (req, res) => {
-  mdbHelper.getById(entityName, id, res);
+  mdbHelper.getById(entityName, req.params.id, res);
 });
 
 router.delete('/product/:id', (req, res) => {
-  return dataHelper.deleteById(req, res, entityName);
-});
-
-router.patch('/product/:id', (req, res) => {
-  var data = dataHelper.readPatchData(req, res, entityName);
-  if (!data) {
-    return;
-  }
-  const patchData = data.patchData;
-  patchData.updatedAt = new Date().getTime();
-  mdbHelper.update(entityName, id, patchData, res);
+  mdbHelper.deleteById(entityName, req.params.id, res);
 });
 
 module.exports = router;

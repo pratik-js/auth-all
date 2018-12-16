@@ -13,6 +13,7 @@ const PAGES = [ProductComponent, SampleComponent, PageNotFoundComponent];
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, MaterialInUseModule],
   declarations: [PAGES, ProductAeComponent],
+  entryComponents: [ProductAeComponent],
   providers: [ProductService],
   exports: [PAGES]
 })
